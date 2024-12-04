@@ -234,7 +234,15 @@ function addToShoppingList(){
                 event.preventDefault();
             }
         });
-        unit.textContent = (parts[1] === 'cup' || parts[1] === 'tps' || parts[1] == 'cups') ? parts[1] : '';
+        if (parts[1] === 'tsp' ||parts[1] === 'teaspoon'){
+            unit.textContent = 'tsp';
+        }
+        else if(parts[1] === 'cups' || parts[1] === 'cup'){
+               unit.textContent = 'cup';
+            }
+        else{
+            unit.textContent = '';
+        }
         nameProduct.textContent = parts.slice(2).join(' ');
         deleteBtn.textContent = '🗑️';
         deleteBtn.addEventListener('click' , () => li.remove());
