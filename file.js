@@ -265,7 +265,11 @@ function savingARecipe(title, image , id){
         return;
     }
     containerSelectedRecipe.innerHTML = '';
-
+    const recipe = buildSavingRecipe(title , image , id)
+    savedList.appendChild(recipe);
+    saveToLocalStorage({ id, title, image });
+}
+function buildSavingRecipe(title , image , id){
     const recipe = document.createElement('li');
     const imageRecipe = document.createElement('img');
     const titleRecipe = document.createElement('span');
@@ -282,11 +286,11 @@ function savingARecipe(title, image , id){
     });
     recipe.appendChild(imageRecipe);
     recipe.appendChild(titleRecipe);
-    recipe.addEventListener('click' ,() => getInfo(recipe.getAttribute('id')));
+    recipe.addEventListener('click' ,() => getInfo(recipe.id));
     recipe.appendChild(deleteBtn);
-    savedList.appendChild(recipe);
-    saveToLocalStorage({ id, title, image });
+    return recipe;
 }
+
 function deleteRecipe(id) {
     console.log('Deleting recipe with id:', id);
     let savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || {};
@@ -313,24 +317,7 @@ function loadSavedRecipes() {
     const savedList = document.getElementById('saved-list');
     Object.keys(savedRecipes).forEach(id => {
         const recipe = savedRecipes[id];
-        const listItem = document.createElement('li');
-        const imageRecipe = document.createElement('img');
-        const titleRecipe = document.createElement('span');
-        const deleteBtn = document.createElement('button');
-        listItem.setAttribute('id', recipe.id);
-        imageRecipe.src = recipe.image;
-        imageRecipe.classList.add('style-photo');
-        titleRecipe.textContent = recipe.title;
-        deleteBtn.textContent = '🗑️';
-        deleteBtn.classList.add('delete-btn');
-        deleteBtn.addEventListener('click', (event) => {
-            event.stopPropagation();
-            deleteRecipe(recipe.id); 
-        });
-        listItem.appendChild(imageRecipe);
-        listItem.appendChild(titleRecipe);
-        listItem.appendChild(deleteBtn); 
-        listItem.addEventListener('click', () => getInfo(recipe.id));
+        const listItem = buildSavingRecipe(recipe.title , recipe.image , recipe.id);
         savedList.appendChild(listItem);
     });
 }
